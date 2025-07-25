@@ -13,13 +13,13 @@ public class UserCon {
     }
 
     @GetMapping("/auth/user")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public String userDetails(){
         return "user";
     }
 
     @GetMapping("/auth/admin")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String adminDetails(){
         return "admin";
     }

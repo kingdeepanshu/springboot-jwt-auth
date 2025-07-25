@@ -1,6 +1,8 @@
 package com.devkaran.user_authentication;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
@@ -28,11 +30,17 @@ public class JwtService {
     }
 
     private Claims getClaims(String token){
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException ex) {
+            throw new RuntimeException("Token expired");
+        } catch (JwtException ex) {
+            throw new RuntimeException("Invalid token");
+        }
     }
 
     public String extractUsername(String token){
